@@ -1,45 +1,30 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import * as React from "react";
+import { ErrorBoundary } from "react-error-boundary";
+// Components
+// import { Quiz } from "./components/Quiz";
+// Styles
+import styles from "./App.module.scss";
+
+const ErrorFallback = () => {
+  return (
+    <div role="alert">
+      There was an error:{" "}
+      <pre style={{ whiteSpace: "normal" }}>Something Wrong with API</pre>
+    </div>
+  );
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+    <>
+      <div className={styles.App}>
+        <h1 className={styles.heading}>REACT + TS QUIZ</h1>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          {/* <Quiz /> */}
+        </ErrorBoundary>
+      </div>
+    </>
+  );
 }
 
-export default App
+export default App;
