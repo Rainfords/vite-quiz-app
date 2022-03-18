@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 // Components
-// import { Quiz } from "./components/Quiz";
+import { Quiz } from "@components/Quiz";
 // Styles
 import styles from "./App.module.scss";
 
@@ -18,9 +18,9 @@ function App() {
   return (
     <>
       <div className={styles.App}>
-        <h1 className={styles.heading}>REACT + TS QUIZ</h1>
+        <h1 className={styles.heading}>QUIZ</h1>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {/* <Quiz /> */}
+          <Quiz />
         </ErrorBoundary>
       </div>
     </>
