@@ -1,12 +1,13 @@
 import * as React from "react";
 
-import { fetchQuizQuestions } from "@api/api";
+import { TriviaCategories, useFetchQuizQuestions } from "@api/api";
 // Components
 import QuestionCard from "@components/QuestionCard";
 // Types
 import { QuestionState, Difficulty } from "@api/api";
 // Styles
 import styles from "./Quiz.module.scss";
+import { useQueryClient } from "react-query";
 
 export type AnswerObject = {
   question: string;
@@ -16,54 +17,49 @@ export type AnswerObject = {
 };
 
 type IStateProps = {
-  loading: boolean;
   number: number;
   score: number;
   gameOver: boolean;
-  questions: QuestionState[];
   userAnswers: AnswerObject[];
-  error: string | null;
+  currentCategory: TriviaCategories;
 };
 
 const TOTAL_QUESTIONS = 10;
+const initialCategory: TriviaCategories = { id: 0, name: "All Categories" };
 
 export const Quiz = () => {
+  const queryClient = useQueryClient();
   const [state, setState] = React.useState<IStateProps>({
-    loading: false,
     number: 0,
     score: 0,
     gameOver: true,
-    questions: [],
     userAnswers: [],
-    error: null,
+    currentCategory: initialCategory,
   });
+  const {
+    data: questions = [],
+    refetch,
+    isLoading,
+    error,
+  } = useFetchQuizQuestions(
+    queryClient,
+    TOTAL_QUESTIONS,
+    Difficulty.EASY,
+    state.currentCategory.id
+  );
 
-  const { error } = state;
   React.useEffect(() => {
     if (error) {
-      throw new Error(error);
+      throw new Error(error.message);
     }
   }, [error]);
 
   const startTrivia = async () => {
-    setState({ ...state, loading: true });
-
-    const newQuestions = await fetchQuizQuestions(
-      TOTAL_QUESTIONS,
-      Difficulty.EASY,
-      10
-    );
-
-    if (!newQuestions.length) {
-      setState({ ...state, error: "I am error" });
-    }
-
+    refetch();
     setState({
       ...state,
       gameOver: false,
-      questions: newQuestions,
       score: 0,
-      loading: false,
       number: 0,
       userAnswers: [],
     });
@@ -75,15 +71,15 @@ export const Quiz = () => {
       const answer = e.currentTarget.value;
 
       // Check answer against correct answer
-      const correct = state.questions[state.number].correct_answer === answer;
+      const correct = questions[state.number].correct_answer === answer;
       e.currentTarget.classList.add(correct ? "correct" : "incorrect");
 
       // Save answer in the array for user answers
       const answerObject = {
-        question: state.questions[state.number].question,
+        question: questions[state.number].question,
         answer,
         correct,
-        correctAnswer: state.questions[state.number].correct_answer,
+        correctAnswer: questions[state.number].correct_answer,
       };
 
       setState({
@@ -116,14 +112,14 @@ export const Quiz = () => {
         <p className={styles.score}>Score: {state.score}</p>
       ) : null}
 
-      {state.loading && <p>Loading Questions...</p>}
+      {isLoading && <p>Loading Questions...</p>}
 
-      {!state.loading && !state.gameOver && (
+      {!isLoading && !state.gameOver && (
         <QuestionCard
           questionNumber={state.number + 1}
           totalQuestions={TOTAL_QUESTIONS}
-          question={state.questions[state.number].question}
-          answers={state.questions[state.number].answers}
+          question={questions[state.number].question}
+          answers={questions[state.number].answers}
           userAnswer={
             state.userAnswers ? state.userAnswers[state.number] : undefined
           }

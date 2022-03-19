@@ -48,7 +48,7 @@ export const useFetchQuizCategoties = (client: QueryClient): UseQueryResult<Triv
     )
 }
 
-export const fetchQuizQuestions = async(amount: number, difficulty: Difficulty, category: number) => {
+const fetchQuizQuestions = async(amount: number, difficulty: Difficulty, category: number) => {
     const endpoint = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&category=${category}`;
 
     const data = await(await fetch(endpoint)).json()
@@ -58,7 +58,7 @@ export const fetchQuizQuestions = async(amount: number, difficulty: Difficulty, 
     }))
 }
 
-export const fetchQuizCategories = async() => {
+const fetchQuizCategories = async() => {
     const endpoint = "https://opentdb.com/api_category.php"
     const data = await(await fetch(endpoint)).json()
     return data.trivia_categories.map((category: TriviaCategories) => ({
