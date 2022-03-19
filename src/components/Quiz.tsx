@@ -4,10 +4,11 @@ import { TriviaCategories, useFetchQuizQuestions } from "@api/api";
 // Components
 import QuestionCard from "@components/QuestionCard";
 // Types
-import { QuestionState, Difficulty } from "@api/api";
+import { QuestionState } from "@api/api";
 // Styles
 import styles from "./Quiz.module.scss";
 import { useQueryClient } from "react-query";
+import DifficultySelector, { Difficulty } from "./DifficultySelector";
 
 export type AnswerObject = {
   question: string;
@@ -22,6 +23,7 @@ type IStateProps = {
   gameOver: boolean;
   userAnswers: AnswerObject[];
   currentCategory: TriviaCategories;
+  difficulty: Difficulty;
 };
 
 const TOTAL_QUESTIONS = 10;
@@ -35,6 +37,7 @@ export const Quiz = () => {
     gameOver: true,
     userAnswers: [],
     currentCategory: initialCategory,
+    difficulty: Difficulty.EASY,
   });
   const {
     data: questions = [],
@@ -44,7 +47,7 @@ export const Quiz = () => {
   } = useFetchQuizQuestions(
     queryClient,
     TOTAL_QUESTIONS,
-    Difficulty.EASY,
+    state.difficulty,
     state.currentCategory.id
   );
 
@@ -100,12 +103,20 @@ export const Quiz = () => {
       setState({ ...state, number: nextQuestion });
     }
   };
+
+  const setDifficulty = (difficulty: Difficulty) => {
+    setState({ ...state, difficulty });
+  };
+
   return (
     <>
       {state.gameOver || state.userAnswers.length === TOTAL_QUESTIONS ? (
-        <button className={styles.start} onClick={startTrivia}>
-          START
-        </button>
+        <>
+          <DifficultySelector setDifficulty={setDifficulty} />
+          <button className={styles.start} onClick={startTrivia}>
+            START
+          </button>
+        </>
       ) : null}
 
       {!state.gameOver ? (

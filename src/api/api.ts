@@ -1,14 +1,6 @@
 import { QueryClient, useQuery, UseQueryResult } from "react-query"
 import { shuffleArray } from "@utils/utils"
 
-export {}
-
-export enum Difficulty {
-    EASY = "easy",
-    MEDIUM = "medium",
-    HARD = "hard",
-}
-
 export type Question = {
     category: string;
     correct_answer: string;
@@ -28,7 +20,7 @@ export type TriviaCategories = {
 export const useFetchQuizQuestions = (
     client: QueryClient, 
     amount: number, 
-    difficulty: Difficulty,
+    difficulty: string,
     category: number
 ): UseQueryResult<QuestionState[], Error> => {
     return useQuery(
