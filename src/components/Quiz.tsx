@@ -132,7 +132,7 @@ export const Quiz = () => {
           />
           <DifficultySelector setDifficulty={setDifficulty} />
           <button className={styles.start} onClick={startTrivia}>
-            START
+            Lets go!
           </button>
         </>
       ) : null}
@@ -160,7 +160,7 @@ export const Quiz = () => {
       state.userAnswers.length === state.number + 1 &&
       state.number !== TOTAL_QUESTIONS - 1 ? (
         <button className={styles.next} onClick={nextQuestion}>
-          NEXT QUESTION
+          Goto Next Question...
         </button>
       ) : null}
     </>

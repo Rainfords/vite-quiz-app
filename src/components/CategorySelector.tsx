@@ -22,22 +22,19 @@ const CategorySelector = (props: IProps) => {
   };
   return (
     <>
-      {isLoading && <p>Loading...</p>}
-      {!isLoading && (
-        <div className={styles.category}>
-          <label>Select Category</label>
-          <select onChange={handleChangeCategory}>
-            <option key={initialCategory.id} value={initialCategory.id}>
-              {initialCategory.name}
+      <div className={styles.category}>
+        <label>Select Category</label>
+        <select onChange={handleChangeCategory}>
+          <option key={initialCategory.id} value={initialCategory.id}>
+            {initialCategory.name}
+          </option>
+          {categories?.map((category: TriviaCategory) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
             </option>
-            {categories?.map((category: TriviaCategory) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+          ))}
+        </select>
+      </div>
     </>
   );
 };

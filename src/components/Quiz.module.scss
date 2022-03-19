@@ -1,8 +1,9 @@
 .score {
   color: #fff;
-  font-size: 2rem;
+  font-size: 24px;
   margin: 0;
   text-align: center;
+  padding-bottom: 15px;
 }
 
 .next {
@@ -19,4 +20,5 @@
 .start {
   @extend .next;
   max-width: 200px;
+  font-size: 24px;
 }
