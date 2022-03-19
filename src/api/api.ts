@@ -12,7 +12,7 @@ export type Question = {
 
 export type QuestionState = Question & { answers: string[]}
 
-export type TriviaCategories = {
+export type TriviaCategory = {
     id: number;
     name: string;
 }
@@ -33,14 +33,14 @@ export const useFetchQuizQuestions = (
     )
 }
 
-export const useFetchQuizCategoties = (client: QueryClient): UseQueryResult<TriviaCategories[], Error> => {
+export const useFetchQuizCategoties = (client: QueryClient): UseQueryResult<TriviaCategory[], Error> => {
     return useQuery(
         "quiz-categories",
         fetchQuizCategories
     )
 }
 
-const fetchQuizQuestions = async(amount: number, difficulty: Difficulty, category: number) => {
+const fetchQuizQuestions = async(amount: number, difficulty: string, category: number) => {
     const endpoint = `https://opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&category=${category}`;
 
     const data = await(await fetch(endpoint)).json()
@@ -53,7 +53,7 @@ const fetchQuizQuestions = async(amount: number, difficulty: Difficulty, categor
 const fetchQuizCategories = async() => {
     const endpoint = "https://opentdb.com/api_category.php"
     const data = await(await fetch(endpoint)).json()
-    return data.trivia_categories.map((category: TriviaCategories) => ({
+    return data.trivia_categories.map((category: TriviaCategory) => ({
         ...category
     }))
 }

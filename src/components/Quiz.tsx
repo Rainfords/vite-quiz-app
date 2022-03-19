@@ -1,6 +1,10 @@
 import * as React from "react";
 
-import { TriviaCategories, useFetchQuizQuestions } from "@api/api";
+import {
+  TriviaCategory,
+  useFetchQuizCategoties,
+  useFetchQuizQuestions,
+} from "@api/api";
 // Components
 import QuestionCard from "@components/QuestionCard";
 // Types
@@ -9,6 +13,7 @@ import { QuestionState } from "@api/api";
 import styles from "./Quiz.module.scss";
 import { useQueryClient } from "react-query";
 import DifficultySelector, { Difficulty } from "./DifficultySelector";
+import CategorySelector from "./CategorySelector";
 
 export type AnswerObject = {
   question: string;
@@ -22,12 +27,12 @@ type IStateProps = {
   score: number;
   gameOver: boolean;
   userAnswers: AnswerObject[];
-  currentCategory: TriviaCategories;
+  currentCategory: TriviaCategory;
   difficulty: Difficulty;
 };
 
 const TOTAL_QUESTIONS = 10;
-const initialCategory: TriviaCategories = { id: 0, name: "All Categories" };
+const initialCategory: TriviaCategory = { id: 0, name: "All Categories" };
 
 export const Quiz = () => {
   const queryClient = useQueryClient();
@@ -50,6 +55,9 @@ export const Quiz = () => {
     state.difficulty,
     state.currentCategory.id
   );
+
+  const { data: categories = [], isLoading: isCategoriesLoading } =
+    useFetchQuizCategoties(queryClient);
 
   React.useEffect(() => {
     if (error) {
@@ -108,10 +116,20 @@ export const Quiz = () => {
     setState({ ...state, difficulty });
   };
 
+  const setCategory = (category: TriviaCategory) => {
+    setState({ ...state, currentCategory: category });
+  };
+
   return (
     <>
       {state.gameOver || state.userAnswers.length === TOTAL_QUESTIONS ? (
         <>
+          <CategorySelector
+            categories={categories}
+            initialCategory={initialCategory}
+            isLoading={isCategoriesLoading}
+            setCategory={setCategory}
+          />
           <DifficultySelector setDifficulty={setDifficulty} />
           <button className={styles.start} onClick={startTrivia}>
             START
