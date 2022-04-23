@@ -34,16 +34,18 @@ type IStateProps = {
 const TOTAL_QUESTIONS = 10;
 const initialCategory: TriviaCategory = { id: 0, name: "All Categories" };
 
-export const Quiz = () => {
+const initialGameState: IStateProps = {
+  number: 0,
+  score: 0,
+  gameOver: true,
+  userAnswers: [],
+  currentCategory: initialCategory,
+  difficulty: Difficulty.EASY,
+};
+
+export const Quiz: React.FC = () => {
   const queryClient = useQueryClient();
-  const [state, setState] = React.useState<IStateProps>({
-    number: 0,
-    score: 0,
-    gameOver: true,
-    userAnswers: [],
-    currentCategory: initialCategory,
-    difficulty: Difficulty.EASY,
-  });
+  const [state, setState] = React.useState<IStateProps>(initialGameState);
   const {
     data: questions = [],
     refetch,
@@ -66,7 +68,7 @@ export const Quiz = () => {
   }, [error]);
 
   const startTrivia = async () => {
-    refetch();
+    await refetch();
     setState({
       ...state,
       gameOver: false,
@@ -136,13 +138,10 @@ export const Quiz = () => {
           </button>
         </>
       ) : null}
-
       {!state.gameOver ? (
         <p className={styles.score}>Score: {state.score}</p>
       ) : null}
-
-      {isLoading && <p>Loading Questions...</p>}
-
+      {isLoading && questions.length === 0 && <p>Loading Questions...</p>}
       {!isLoading && !state.gameOver && (
         <QuestionCard
           questionNumber={state.number + 1}
@@ -155,11 +154,10 @@ export const Quiz = () => {
           callback={checkAnswer}
         />
       )}
-
       {!state.gameOver &&
       state.userAnswers.length === state.number + 1 &&
       state.number !== TOTAL_QUESTIONS - 1 ? (
-        <button className={styles.next} onClick={nextQuestion}>
+        <button className={styles.button} onClick={nextQuestion}>
           Goto Next Question...
         </button>
       ) : null}

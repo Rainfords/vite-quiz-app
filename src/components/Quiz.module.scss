@@ -6,7 +6,7 @@
   padding-bottom: 15px;
 }
 
-.next {
+.button {
   cursor: pointer;
   background: linear-gradient(180deg, #fff, #ffcc91);
   border: 2px solid #d38558;
@@ -15,10 +15,11 @@
   height: 40px;
   margin: 20px auto;
   padding: 0 40px;
+  font-size: 1.1rem;
 }
 
 .start {
-  @extend .next;
+  @extend .button;
   max-width: 200px;
   font-size: 24px;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import styles from "./DifficultySelector.module.scss";
 
 export enum Difficulty {
@@ -11,7 +11,7 @@ interface IProps {
   setDifficulty: (difficulty: Difficulty) => void;
 }
 
-const DifficultySelector = (props: IProps) => {
+const DifficultySelector: FC<IProps> = (props) => {
   const handleChangeDifficulty = (
     event: React.ChangeEvent<HTMLSelectElement> | undefined
   ) => {

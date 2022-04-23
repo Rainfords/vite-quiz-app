@@ -1,5 +1,5 @@
 import { TriviaCategory } from "@api/api";
-import React from "react";
+import React, { FC } from "react";
 import styles from "./CategorySelector.module.scss";
 
 interface IProps {
@@ -9,7 +9,7 @@ interface IProps {
   setCategory: (category: TriviaCategory) => void;
 }
 
-const CategorySelector = (props: IProps) => {
+const CategorySelector: FC<IProps> = (props) => {
   const { initialCategory, categories, setCategory, isLoading } = props;
   const handleChangeCategory = (
     event: React.ChangeEvent<HTMLSelectElement> | undefined
