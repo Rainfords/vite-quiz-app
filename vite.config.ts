@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tsconfigPaths()
   ],
-  base: "/quiz/",
+  //base: "/quiz/",
 })
